@@ -1,0 +1,149 @@
+C:.
+|   .editorconfig
+|   .env
+|   .env.example
+|   .gitattributes
+|   .gitignore
+|   .prettierrc.json
+|   env.d.ts
+|   eslint.config.ts
+|   index.html
+|   package-lock.json
+|   package.json
+|   README.md
+|   tsconfig.app.json
+|   tsconfig.json
+|   tsconfig.node.json
+|   vite.config.ts
+|
++---.vscode
+|       extensions.json
+|       settings.json
+|
++---dist
++---docs
+|       developStack.md
+|       recommendedStructure.md
+|       tree.txt
+|
++---node_modules
+|   |   .package-lock.json
+|   |
+|   +--- ...
+|
++---public
+|       favicon.ico
+|
++---scripts
++---src
+|   +---app
+|   |   |   App.vue
+|   |   |   main.ts
+|   |   |
+|   |   +---providers
+|   |   +---router
+|   |   |       guards.ts
+|   |   |       index.ts
+|   |   |
+|   |   +---store
+|   |   |       auth.store.ts
+|   |   |
+|   |   \---styles
+|   |           index.css
+|   |           tokens.css
+|   |
+|   +---entities
+|   |   +---block
+|   |   |       mapper.ts
+|   |   |       model.ts
+|   |   |
+|   |   +---page
+|   |   \---user
+|   +---features
+|   |   +---blocks
+|   |   |   +---lib
+|   |   |   |       block-tree.ts
+|   |   |   |
+|   |   |   +---model
+|   |   |   |       blocks.store.ts
+|   |   |   |
+|   |   |   \---ui
+|   |   |           BlockView.vue
+|   |   |
+|   |   +---editor
+|   |   |   +---lib
+|   |   |   +---model
+|   |   |   |       editor.store.ts
+|   |   |   |
+|   |   |   \---ui
+|   |   |           Editor.vue
+|   |   |
+|   |   +---realtime
+|   |   |   +---lib
+|   |   |   \---model
+|   |   \---search
+|   +---pages
+|   |       HelloWorld.vue
+|   |       TheWelcome.vue
+|   |       WelcomeItem.vue
+|   |
+|   +---processes
+|   +---services
+|   |   +---auth
+|   |   |       auth.service.ts
+|   |   |
+|   |   +---db
+|   |   |   |   .env
+|   |   |   |   .gitignore
+|   |   |   |   repo.page.ts
+|   |   |   |
+|   |   |   \---prisma
+|   |   |           schema.prisma
+|   |   |
+|   |   +---http
+|   |   |       client.ts
+|   |   |       endpoints.ts
+|   |   |
+|   |   +---realtime
+|   |   |       ws.client.ts
+|   |   |
+|   |   \---wasm
+|   |           index.ts
+|   |
+|   +---shared
+|   |   +---assets
+|   |   |   |   logo.svg
+|   |   |   |
+|   |   |   +---css
+|   |   |   |       base.css
+|   |   |   |       main.css
+|   |   |   |
+|   |   |   +---icons
+|   |   |   |       IconCommunity.vue
+|   |   |   |       IconDocumentation.vue
+|   |   |   |       IconEcosystem.vue
+|   |   |   |       IconSupport.vue
+|   |   |   |       IconTooling.vue
+|   |   |   |
+|   |   |   +---images
+|   |   |   \---videos
+|   |   +---components
+|   |   |       Footer.vue
+|   |   |       Header.vue
+|   |   |       Navigation.vue
+|   |   |
+|   |   +---composables
+|   |   +---constants
+|   |   +---types
+|   |   +---ui
+|   |   |       Button.vue
+|   |   |       Modal.vue
+|   |   |
+|   |   \---utils
+|   \---widgets
++---tests
+\---wasm-core
+    |   Cargo.lock
+    |   Cargo.toml
+    |
+    +--- ...

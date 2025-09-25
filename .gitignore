@@ -29,7 +29,17 @@ coverage
 
 *.tsbuildinfo
 
+# Vite
+.vite
+
+# Wasm / Rust
+/wasm-core/target
+/wasm-core/pkg
+
+# Gemini
+GEMINI.md
+
 #personal
 .firebase
 .env
-docs
+errors
