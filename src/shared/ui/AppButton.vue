@@ -1,12 +1,13 @@
 <template>
   <button
     :class="[
-      'px-4 py-2 rounded-md font-medium transition-colors duration-200',
-      variantClasses
+      'rounded-md font-medium transition-colors duration-200',
+      variantClasses,
+      sizeClasses,
     ]"
     @click="handleClick"
   >
-    {{ text }}
+    <slot></slot>
   </button>
 </template>
 
@@ -14,12 +15,13 @@
 import { computed } from 'vue';
 
 interface Props {
-  text: string;
   variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'default' | 'icon';
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: 'ghost', // Default to a less intrusive style
+  variant: 'ghost',
+  size: 'default',
 });
 
 const emit = defineEmits(['click']);
@@ -34,6 +36,16 @@ const variantClasses = computed(() => {
       return 'text-gray-600 hover:bg-gray-100';
     default:
       return 'text-gray-600 hover:bg-gray-100';
+  }
+});
+
+const sizeClasses = computed(() => {
+  switch (props.size) {
+    case 'icon':
+      return 'p-2';
+    case 'default':
+    default:
+      return 'px-4 py-2';
   }
 });
 
