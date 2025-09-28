@@ -4,30 +4,31 @@
 
 | 구분         | 역할 | 특징 |
 | ------------ | ---- | ---- |
-| Vue 3        | ???  | ???  |
-| Vite         | ???  | ???  |
-| TypeScript   | ???  | ???  |
-| Tailwind CSS | ???  | ???  |
-| Pinia        | ???  | ???  |
+| Vue 3        | UI 프레임워크 | Composition API 기반의 반응형 UI 개발, 컴포넌트 기반 아키텍처 |
+| Vite         | 빌드 도구 및 개발 서버 | 빠른 HMR(Hot Module Replacement)을 통한 생산성 향상, Rollup 기반 프로덕션 빌드 |
+| TypeScript   | 정적 타입 시스템 | 코드 안정성 및 가독성 확보, 컴파일 시점 에러 감지, 강력한 자동 완성 |
+| Tailwind CSS | CSS 프레이워크 | Utility-First 접근 방식으로 신속한 UI 프로토타이핑 및 일관된 디자인 시스템 구축 |
+| Pinia        | 상태 관리 라이브러리 | Vuex를 대체하는 공식 라이브러리, 직관적인 API로 모듈화된 전역 상태(인증, 페이지 목록) 관리 |
 
 #### 2. Backend
 
 | 구분                    | 역할 | 특징 |
 | ----------------------- | ---- | ---- |
-| NestJS                  | ???  | ???  |
-| Firebase Authentication | ???  | ???  |
-| Prisma                  | ???  | ???  |
+| NestJS                  | 백엔드 프레임워크 **(향후 도입)** | TypeScript 기반, 모듈화 및 DI(의존성 주입)를 통한 확장성 있는 서버 아키텍처 구축 목표 |
+| Firebase Authentication | 인증 서비스 **(현재 사용)** | Google 등 소셜 로그인을 제공하여 빠른 프로토타이핑 지원. 별도 서버 없이 인증 구현 |
+| Prisma                  | ORM **(향후 도입)** | TypeScript 기반의 Type-safe 쿼리, 직관적인 스키마 정의로 PostgreSQL과 안전하게 통신 |
 
 #### 3. Database
 
 | 구분                | 역할 | 특징 |
 | ------------------- | ---- | ---- |
-| PostgreSQL          | ???  | ???  |
-| AWS Storage Gateway | ???  | ???  |
+| PostgreSQL          | 관계형 데이터베이스 **(향후 도입)** | 높은 안정성과 확장성을 바탕으로 애플리케이션의 핵심 데이터 저장 |
+| AWS Storage Gateway | 하이브리드 스토리지 **(목표 재검토 필요)** | 온프레미스 환경과 AWS 클라우드 스토리지 연결. (현재 프로젝트에서는 S3 직접 사용이 더 적합할 수 있음) |
 
 #### 4. Infra & DevOps
 
 | 구분               | 역할 | 특징 |
 | ------------------ | ---- | ---- |
-| AWS (EC2, RDS, S3) | ???  | ???  |
-| Firebase Hosting   | ???  | ???  |
+| AWS (EC2, RDS, S3) | 클라우드 인프라 **(최종 배포 목표)** | EC2(NestJS 서버), RDS(PostgreSQL), S3(이미지 등 정적 파일 및 프론트엔드 빌드 결과물 호스팅) |
+| Firebase Hosting   | 정적 호스팅 서비스 **(현재/또는 배포 옵션)** | 빠른 정적 컨텐츠(SPA) 배포, CDN 기본 제공, Firebase 서비스와 손쉬운 통합 |
+| WSL2 & Docker      | 개발 및 배포 환경 | 개발/운영 환경 일치, PostgreSQL 등 서비스 컨테이너화, 이식성 높은 배포 |
