@@ -17,6 +17,9 @@ export const usePageStore = defineStore('pages', () => {
     return (pageId: string) => pages.value.find((page) => page.id === pageId);
   });
 
+  // 헤더의 저장 버튼과 페이지 뷰의 저장 로직을 연결하기 위한 신호(trigger)입니다.
+  const saveTrigger = ref(0);
+
   async function fetchPages() {
     const authStore = useAuthStore();
     const user = authStore.user;
@@ -89,6 +92,7 @@ export const usePageStore = defineStore('pages', () => {
     getPageById, // 새로 만든 getter를 반환 객체에 추가합니다.
     fetchPages,
     createPage,
-    updatePageContent, // 새로 만든 액션을 반환 객체에 추가합니다.
+    updatePageContent,
+    saveTrigger, // 반환 객체에 추가
   };
 });

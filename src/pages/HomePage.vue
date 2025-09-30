@@ -1,23 +1,30 @@
 <script setup lang="ts">
 import AppHeader from '@/widgets/AppHeader.vue'
-import AppSidebar from '@/widgets/AppSidebar.vue' // AppNavigation 대신 AppSidebar 임포트
+import AppSidebar from '@/widgets/AppSidebar.vue'
 import AppFooter from '@/widgets/AppFooter.vue'
 </script>
 
 <template>
-  <div class="flex">
+  <!-- 1. 전체 화면을 차지하는 flex 컨테이너 -->
+  <div class="flex h-screen bg-white">
+    <!-- 2. 사이드바: 고정 너비를 가짐 -->
     <AppSidebar />
-    <div class="w-full flex-1 ml-[15%]">
+
+    <!-- 3. 메인 영역: 남은 공간을 모두 차지하고, 내부에서 수직 flex 레이아웃을 가짐 -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- 3-1. 헤더 -->
       <AppHeader />
-      <div class="h-screen p-4 mt-24">
-        <!-- 
-          <RouterView />는 Vue Router가 제공하는 핵심 컴포넌트입니다.
-          현재 URL 경로와 일치하는 라우트 규칙을 찾고, 그 규칙에 연결된 컴포넌트를 이 자리에 렌더링합니다.
-          예를 들어, URL이 /pages/123 이면, router/index.ts에 설정한 규칙에 따라 PageView.vue 컴포넌트가 이 자리에 보이게 됩니다.
-          만약 일치하는 자식 라우트가 없으면 아무것도 표시되지 않습니다.
-        -->
+
+      <!-- 
+        3-2. 메인 콘텐츠: 
+        - flex-1: 남은 수직 공간을 모두 차지하여 푸터를 아래로 밀어냄
+        - overflow-y-auto: 내용이 길어지면 이 영역만 스크롤됨
+      -->
+      <main class="flex-1 overflow-y-auto p-4">
         <RouterView />
-      </div>
+      </main>
+
+      <!-- 3-3. 푸터: 메인 콘텐츠 아래에 위치 -->
       <AppFooter />
     </div>
   </div>
