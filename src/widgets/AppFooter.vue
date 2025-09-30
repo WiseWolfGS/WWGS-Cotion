@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="fixed bottom-0 w-[85%] bg-gray-100 text-gray-600 p-4 text-center border-t border-gray-200 mt-8"
+    class="bottom-0 bg-gray-100 dark:bg-gray-900 dark:border-gray-700 text-gray-600 p-4 text-center border-t border-gray-200 mt-8 flex-shrink-0"
   >
     <p>&copy; {{ new Date().getFullYear() }} Notion Clone. All rights reserved.</p>
     <div class="flex justify-center space-x-4 mt-2">

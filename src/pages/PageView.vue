@@ -59,7 +59,7 @@ watchEffect(() => {
   <div v-if="currentPage" class="h-full">
     <textarea
       v-model="localContent"
-      class="w-full h-full p-2 border-none rounded focus:outline-none bg-transparent"
+      class="w-full h-full p-2 border-none rounded focus:outline-none bg-transparent dark:text-gray-100"
       placeholder="내용을 입력하세요..."
     ></textarea>
     <!-- 저장 버튼이 헤더로 이동했으므로 여기서 제거합니다. -->

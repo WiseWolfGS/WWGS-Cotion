@@ -6,7 +6,7 @@ import AppFooter from '@/widgets/AppFooter.vue'
 
 <template>
   <!-- 1. 전체 화면을 차지하는 flex 컨테이너 -->
-  <div class="flex h-screen bg-white">
+  <div class="flex h-screen bg-white dark:bg-gray-900">
     <!-- 2. 사이드바: 고정 너비를 가짐 -->
     <AppSidebar />
 

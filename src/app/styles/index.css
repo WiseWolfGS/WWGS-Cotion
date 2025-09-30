@@ -1,4 +1,40 @@
+/* Tailwind v4 import */
 @import 'tailwindcss';
+
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Global base styles (from base.css) */
+body {
+  min-height: 100vh;
+  /*
+    color와 background를 여기서 지정하지 않습니다.
+    대신 각 컴포넌트의 Tailwind 클래스(예: bg-white, text-gray-800)가
+    이 역할을 담당하게 하여 스타일 충돌을 방지합니다.
+  */
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
