@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref, type Ref } from 'vue';
+import { ref, computed, type Ref } from 'vue';
 import { useAuthStore } from '@/app/store/auth.store';
 import { pageRepository } from '@/services/db/repo.page.ts';
 import type { Page } from './model';
@@ -7,6 +7,15 @@ import type { Page } from './model';
 export const usePageStore = defineStore('pages', () => {
   const pages: Ref<Page[]> = ref([]);
   const isLoading = ref(false);
+
+  /**
+   * ID를 기반으로 특정 페이지를 찾는 Getter입니다.
+   * computed 속성을 사용해 pages 배열이 변경될 때만 다시 계산하므로 효율적입니다.
+   * @param {string} pageId - 찾고자 하는 페이지의 ID
+   */
+  const getPageById = computed(() => {
+    return (pageId: string) => pages.value.find((page) => page.id === pageId);
+  });
 
   async function fetchPages() {
     const authStore = useAuthStore();
@@ -55,6 +64,7 @@ export const usePageStore = defineStore('pages', () => {
   return {
     pages,
     isLoading,
+    getPageById, // 새로 만든 getter를 반환 객체에 추가합니다.
     fetchPages,
     createPage,
   };

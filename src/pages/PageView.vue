@@ -1,24 +1,60 @@
 <script setup lang="ts">
+import { computed, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
+import { usePageStore } from '@/entities/page/page.store';
+import { storeToRefs } from 'pinia';
 
-// useRoute()는 현재 활성화된 라우트의 정보를 담고 있는 객체입니다.
-// 이 객체를 통해 URL의 파라미터, 쿼리, 전체 경로 등의 정보에 접근할 수 있습니다.
+// 1. 라우트와 스토어 인스턴스를 가져옵니다.
 const route = useRoute();
+const pageStore = usePageStore();
 
-// route.params는 URL 경로에 포함된 동적 파라미터들을 담고 있습니다.
-// 예를 들어, URL이 /pages/12345 라면, route.params.pageId는 '12345'가 됩니다.
-// 이 pageId를 이용해 나중에는 Pinia 스토어나 API에서 실제 페이지 데이터를 가져오게 됩니다.
-const pageId = route.params.pageId;
+// 2. 스토어의 상태와 getter를 가져옵니다.
+// pages는 방어 로직을 위해, getPageById는 페이지를 찾기 위해 필요합니다.
+const { pages, getPageById } = storeToRefs(pageStore);
+
+// 3. 현재 페이지를 찾는 반응형 로직을 작성합니다.
+// computed를 사용하면 route.params.pageId가 바뀔 때마다 자동으로 다시 계산됩니다.
+const currentPage = computed(() => {
+  // route.params.pageId는 string | string[] 타입일 수 있으므로, 확실하게 string으로 변환합니다.
+  const pageId = Array.isArray(route.params.pageId) ? route.params.pageId[0] : route.params.pageId;
+
+  // pageId가 존재하고, getter가 정의되어 있을 때만 페이지를 찾습니다.
+  if (pageId && getPageById.value) {
+    return getPageById.value(pageId);
+  }
+  return null;
+});
+
+// 4. 방어 로직: 페이지 목록이 비어있을 경우 데이터를 불러옵니다.
+// watchEffect는 내부에서 사용된 반응형 상태(pages)가 변경될 때마다 실행됩니다.
+// 사용자가 URL을 직접 치고 들어와 pages가 비어있을 때 fetchPages를 호출해줍니다.
+watchEffect(() => {
+  if (pages.value.length === 0) {
+    pageStore.fetchPages();
+  }
+});
+
 </script>
 
 <template>
-  <div>
-    <h1>페이지 상세 뷰</h1>
-    <p>현재 보고 있는 페이지의 ID: {{ pageId }}</p>
-    <!-- TODO: 나중에는 여기에 페이지 제목, 내용 등 실제 데이터가 렌더링됩니다. -->
+  <!-- currentPage가 찾아지면 내용을 보여주고, 아니면 로딩 또는 에러 메시지를 표시합니다. -->
+  <div v-if="currentPage">
+    <h1>{{ currentPage.title }}</h1>
+    <p>
+      <!-- 페이지 콘텐츠가 있다면 보여주고, 없다면 안내 메시지를 표시합니다. -->
+      {{ currentPage.content || '아직 작성된 내용이 없습니다.' }}
+    </p>
+  </div>
+  <div v-else>
+    <p>페이지를 불러오는 중이거나, 존재하지 않는 페이지입니다.</p>
   </div>
 </template>
 
 <style scoped>
 /* 이 컴포넌트에만 적용될 스타일 */
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
 </style>
