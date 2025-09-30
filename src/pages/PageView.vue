@@ -1,49 +1,77 @@
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePageStore } from '@/entities/page/page.store';
 import { storeToRefs } from 'pinia';
+import AppButton from '@/shared/ui/AppButton.vue';
 
-// 1. 라우트와 스토어 인스턴스를 가져옵니다.
 const route = useRoute();
 const pageStore = usePageStore();
-
-// 2. 스토어의 상태와 getter를 가져옵니다.
-// pages는 방어 로직을 위해, getPageById는 페이지를 찾기 위해 필요합니다.
 const { pages, getPageById } = storeToRefs(pageStore);
 
-// 3. 현재 페이지를 찾는 반응형 로직을 작성합니다.
-// computed를 사용하면 route.params.pageId가 바뀔 때마다 자동으로 다시 계산됩니다.
 const currentPage = computed(() => {
-  // route.params.pageId는 string | string[] 타입일 수 있으므로, 확실하게 string으로 변환합니다.
   const pageId = Array.isArray(route.params.pageId) ? route.params.pageId[0] : route.params.pageId;
-
-  // pageId가 존재하고, getter가 정의되어 있을 때만 페이지를 찾습니다.
   if (pageId && getPageById.value) {
     return getPageById.value(pageId);
   }
   return null;
 });
 
-// 4. 방어 로직: 페이지 목록이 비어있을 경우 데이터를 불러옵니다.
-// watchEffect는 내부에서 사용된 반응형 상태(pages)가 변경될 때마다 실행됩니다.
-// 사용자가 URL을 직접 치고 들어와 pages가 비어있을 때 fetchPages를 호출해줍니다.
+// --- 에디터 로직 시작 ---
+
+// 1. 컴포넌트 내부의 로컬 상태를 만듭니다. textarea의 내용과 바인딩됩니다.
+const localContent = ref('');
+
+// 2. 페이지가 변경될 때마다(currentPage가 바뀔 때마다) currentPage의 내용을 localContent에 복사합니다.
+//    이렇게 해야 다른 페이지로 이동했을 때 textarea의 내용도 함께 바뀝니다.
+watch(
+  currentPage,
+  (newPage) => {
+    if (newPage) {
+      // newPage.content가 null이나 undefined일 경우를 대비해 빈 문자열로 처리합니다.
+      localContent.value = newPage.content || '';
+    }
+  },
+  { immediate: true } // 컴포넌트가 처음 로드될 때도 즉시 실행합니다.
+);
+
+// 3. 저장 버튼을 눌렀을 때 실행될 함수입니다.
+async function handleSave() {
+  if (!currentPage.value) {
+    alert('페이지 정보를 찾을 수 없습니다.');
+    return;
+  }
+  await pageStore.updatePageContent(currentPage.value.id, localContent.value);
+  alert('저장되었습니다!'); // 사용자에게 피드백을 줍니다.
+}
+
+// --- 에디터 로직 끝 ---
+
 watchEffect(() => {
   if (pages.value.length === 0) {
     pageStore.fetchPages();
   }
 });
-
 </script>
 
 <template>
-  <!-- currentPage가 찾아지면 내용을 보여주고, 아니면 로딩 또는 에러 메시지를 표시합니다. -->
   <div v-if="currentPage">
-    <h1>{{ currentPage.title }}</h1>
-    <p>
-      <!-- 페이지 콘텐츠가 있다면 보여주고, 없다면 안내 메시지를 표시합니다. -->
-      {{ currentPage.content || '아직 작성된 내용이 없습니다.' }}
-    </p>
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">{{ currentPage.title }}</h1>
+      <AppButton @click="handleSave">저장</AppButton>
+    </div>
+
+    <!-- 
+      v-model="localContent"를 통해 textarea의 내용을 
+      컴포넌트의 localContent 상태와 양방향으로 묶습니다.
+      사용자가 타이핑하면 localContent가 업데이트되고,
+      localContent가 바뀌면 textarea의 내용도 바뀝니다.
+    -->
+    <textarea
+      v-model="localContent"
+      class="w-full h-96 p-2 border rounded bg-gray-50 dark:bg-gray-800"
+      placeholder="내용을 입력하세요..."
+    ></textarea>
   </div>
   <div v-else>
     <p>페이지를 불러오는 중이거나, 존재하지 않는 페이지입니다.</p>
@@ -51,10 +79,5 @@ watchEffect(() => {
 </template>
 
 <style scoped>
-/* 이 컴포넌트에만 적용될 스타일 */
-h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
+/* 스타일은 필요에 따라 추가 */
 </style>

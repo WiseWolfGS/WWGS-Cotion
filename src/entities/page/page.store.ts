@@ -61,11 +61,34 @@ export const usePageStore = defineStore('pages', () => {
     }
   }
 
+  /**
+   * 페이지 내용을 업데이트하는 액션입니다.
+   * @param pageId - 수정할 페이지의 ID
+   * @param content - 새로운 내용
+   */
+  async function updatePageContent(pageId: string, content: string) {
+    try {
+      // 1. 데이터베이스 업데이트 요청
+      await pageRepository.updatePage(pageId, { content });
+
+      // 2. DB 업데이트 성공 시, 스토어의 로컬 상태도 직접 수정
+      //    이렇게 하면 데이터를 다시 불러올 필요 없이 UI가 즉시 반응합니다.
+      const page = pages.value.find((p) => p.id === pageId);
+      if (page) {
+        page.content = content;
+      }
+    } catch (error) {
+      console.error('페이지 업데이트 중 에러 발생:', error);
+      alert('저장에 실패했습니다.');
+    }
+  }
+
   return {
     pages,
     isLoading,
     getPageById, // 새로 만든 getter를 반환 객체에 추가합니다.
     fetchPages,
     createPage,
+    updatePageContent, // 새로 만든 액션을 반환 객체에 추가합니다.
   };
 });
