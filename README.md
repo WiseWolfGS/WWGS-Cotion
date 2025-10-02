@@ -6,9 +6,16 @@
 
 ---
 
+## 🚀 임시 페이지
+
+👉 [배포된 데모 바로가기](https://notionclone-381df.web.app/)
+
+---
+
 ## 🌒 현재 구현된 화면
 
 ![Sample Display](./docs/SampleScreenshot.png)
+![Sample Login Display](./docs/SampleScreenshotLogin.png)
 
 ---
 
@@ -89,7 +96,3 @@ npm run lint
 - [날짜 별 실수 및 해결 기록](./docs/days/)
 
 ---
-
-## 임시 배포 URL
-
-- 추후 추가 예정
