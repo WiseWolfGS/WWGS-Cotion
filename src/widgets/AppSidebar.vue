@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { watch, type PropType } from 'vue';
+import { watch, type PropType, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/app/store/auth.store';
 import { usePageStore } from '@/entities/page/page.store';
 import AppButton from '@/shared/ui/AppButton.vue';
 import { RouterLink } from 'vue-router';
 import { useTheme } from '@/shared/composables/useTheme';
-import defaultAvatar from '@/shared/assets/images/SampleUserAvatar.png'; // --- 이미지 import 추가 ---
+import defaultAvatar from '@/shared/assets/images/SampleUserAvatar.png';
 
 // --- Props 정의 ---
-defineProps({
+const props = defineProps({
   width: {
     type: Number,
     required: true
@@ -17,9 +17,23 @@ defineProps({
   onStartResize: {
     type: Function as PropType<(event: MouseEvent) => void>,
     required: true
+  },
+  isMobileOpen: {
+    type: Boolean,
+    required: true,
   }
 });
 // --- End of Props ---
+
+// --- Computed classes for aside element ---
+const asideClasses = computed(() => [
+  'bg-slate-50 text-gray-800 p-2 flex flex-col border-r border-gray-200',
+  'dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700',
+  'fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 ease-in-out',
+  'md:relative md:translate-x-0',
+  props.isMobileOpen ? 'translate-x-0' : '-translate-x-full',
+]);
+
 
 const authStore = useAuthStore();
 const { isLoggedIn, user } = storeToRefs(authStore);
@@ -47,19 +61,18 @@ watch(
 <template>
   <aside
     :style="{ width: width + 'px' }"
-    class="relative bg-slate-50 text-gray-800 p-2 flex flex-col border-r border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+    :class="asideClasses"
   >
-    <!-- --- Resize Handle --- -->
+    <!-- --- Resize Handle (Desktop Only) --- -->
     <div
       @mousedown="onStartResize"
-      class="absolute top-0 right-0 h-full w-1.5 cursor-col-resize hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-200"
+      class="absolute top-0 right-0 h-full w-1.5 cursor-col-resize hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-200 hidden md:block"
       title="Resize sidebar"
     ></div>
     <!-- --- End of Resize Handle --- -->
 
     <div v-if="isLoggedIn && user" class="p-2 mb-2">
       <div class="flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
-        <!-- --- 이미지 경로 수정 --- -->
         <img :src="user.photoURL || defaultAvatar" alt="User Avatar" class="w-6 h-6 rounded-full" />
         <span class="font-bold text-sm truncate">{{ user.displayName || user.email }}'s Notion</span>
       </div>
@@ -102,5 +115,10 @@ watch(
 </template>
 
 <style scoped>
-/* 필요한 경우 여기에 스타일 추가 */
+/* The resizable width on desktop is now an inline style, so we need to override the width for mobile */
+@media (max-width: 767px) {
+  aside {
+    width: 240px !important; /* Or your desired mobile width */
+  }
+}
 </style>

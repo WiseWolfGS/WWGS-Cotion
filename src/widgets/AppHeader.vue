@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { usePageStore } from '@/entities/page/page.store'
-import { storeToRefs } from 'pinia'
-import AppButton from '@/shared/ui/AppButton.vue'
+import { type PropType } from 'vue';
+import AppButton from '@/shared/ui/AppButton.vue';
 
-const route = useRoute()
-const pageStore = usePageStore()
-
-const { getPageById } = storeToRefs(pageStore)
-const currentPage = computed(() => {
-  const pageId = route.params.pageId as string
-  if (pageId && getPageById.value) {
-    return getPageById.value(pageId)
-  }
-  return null
-})
-
-// 저장 신호를 보내는 함수
-function triggerSave() {
-  pageStore.saveTrigger++
-}
+defineProps({
+  onToggleMobileSidebar: {
+    type: Function as PropType<() => void>,
+    required: true,
+  },
+});
 </script>
 
 <template>
-  <header
-    class="h-16 border-b border-gray-200 bg-white dark:text-gray-100 dark:bg-gray-800 dark:border-gray-700 flex-shrink-0"
-  >
-    <div class="flex items-center justify-between h-full px-4">
-      <!-- 페이지 경로 (Breadcrumb) -->
-      <div v-if="currentPage" class="text-sm font-semibold">
-        {{ currentPage.title }}
-      </div>
-      <div v-else class="text-sm font-semibold">Workspace</div>
+  <header class="flex items-center p-2 border-b border-gray-200 dark:border-gray-700">
+    <!-- Hamburger Menu Button (Mobile Only) -->
+    <AppButton
+      variant="ghost"
+      size="icon"
+      class="md:hidden mr-2"
+      @click="onToggleMobileSidebar"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </AppButton>
 
-      <!-- 페이지 액션 버튼들 -->
-      <div class="flex items-center gap-2">
-        <!-- 현재 페이지가 있을 때만 저장 버튼을 보여줍니다. -->
-        <AppButton v-if="currentPage" @click="triggerSave" class="dark:text-gray-100"
-          >저장</AppButton
-        >
-        <!-- 향후 공유, 댓글 등 다른 버튼 추가 -->
-      </div>
+    <!-- Breadcrumbs / Page Title -->
+    <div class="flex items-center text-sm">
+      <span>Page Title</span>
+    </div>
+
+    <div class="ml-auto">
+      <AppButton variant="ghost">Share</AppButton>
     </div>
   </header>
 </template>
