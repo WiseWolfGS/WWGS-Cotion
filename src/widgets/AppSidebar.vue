@@ -1,15 +1,29 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { watch, type PropType } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/app/store/auth.store';
 import { usePageStore } from '@/entities/page/page.store';
 import AppButton from '@/shared/ui/AppButton.vue';
 import { RouterLink } from 'vue-router';
 import { useTheme } from '@/shared/composables/useTheme';
+import defaultAvatar from '@/shared/assets/images/SampleUserAvatar.png'; // --- 이미지 import 추가 ---
+
+// --- Props 정의 ---
+defineProps({
+  width: {
+    type: Number,
+    required: true
+  },
+  onStartResize: {
+    type: Function as PropType<(event: MouseEvent) => void>,
+    required: true
+  }
+});
+// --- End of Props ---
 
 const authStore = useAuthStore();
 const { isLoggedIn, user } = storeToRefs(authStore);
-const { logout, loginWithGoogle } = authStore; // loginWithGoogle 함수 가져오기
+const { logout, loginWithGoogle } = authStore;
 
 const pageStore = usePageStore();
 const { pages, isLoading } = storeToRefs(pageStore);
@@ -32,11 +46,21 @@ watch(
 
 <template>
   <aside
-    class="w-60 bg-slate-50 text-gray-800 p-2 flex flex-col border-r border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+    :style="{ width: width + 'px' }"
+    class="relative bg-slate-50 text-gray-800 p-2 flex flex-col border-r border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
   >
+    <!-- --- Resize Handle --- -->
+    <div
+      @mousedown="onStartResize"
+      class="absolute top-0 right-0 h-full w-1.5 cursor-col-resize hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-200"
+      title="Resize sidebar"
+    ></div>
+    <!-- --- End of Resize Handle --- -->
+
     <div v-if="isLoggedIn && user" class="p-2 mb-2">
       <div class="flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
-        <img :src="user.photoURL || '/src/shared/assets/images/SampleUserAvatar.png'" alt="User Avatar" class="w-6 h-6 rounded-full" />
+        <!-- --- 이미지 경로 수정 --- -->
+        <img :src="user.photoURL || defaultAvatar" alt="User Avatar" class="w-6 h-6 rounded-full" />
         <span class="font-bold text-sm truncate">{{ user.displayName || user.email }}'s Notion</span>
       </div>
     </div>
@@ -76,3 +100,7 @@ watch(
     </div>
   </aside>
 </template>
+
+<style scoped>
+/* 필요한 경우 여기에 스타일 추가 */
+</style>
