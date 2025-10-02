@@ -93,7 +93,7 @@ watch(
         Switch to {{ theme === 'light' ? 'Dark' : 'Light' }} Mode
       </AppButton>
       <AppButton @click="createPage" variant="ghost" class="w-full justify-start mb-2">New Page</AppButton>
-      <AppButton @click="logout" variant="ghost" class="w-full justify-start text-red-500">Logout</AppButton>
+      <AppButton @click="logout" variant="ghost" class="w-full justify-start text-red-500 dark:text-red-500">Logout</AppButton>
     </div>
     <div v-else class="mt-auto p-2 border-t border-gray-200 dark:border-gray-700">
       <AppButton @click="loginWithGoogle" variant="primary" class="w-full justify-center">Login with Google</AppButton>

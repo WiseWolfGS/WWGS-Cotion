@@ -25,13 +25,13 @@ const emit = defineEmits(['click'])
 const variantClasses = computed(() => {
   switch (props.variant) {
     case 'primary':
-      return 'bg-blue-600 text-white hover:bg-blue-700'
+      return 'bg-blue-600 text-white hover:bg-blue-700' // Primary is often consistent across themes
     case 'secondary':
-      return 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+      return 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
     case 'ghost':
-      return 'text-gray-600 hover:bg-gray-100'
+      return 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
     default:
-      return 'text-gray-600 hover:bg-gray-100'
+      return 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
   }
 })
 
